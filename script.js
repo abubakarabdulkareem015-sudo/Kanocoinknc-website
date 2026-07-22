@@ -1,15 +1,23 @@
+// Kano Coin (KNC) App
+
 // Supabase Connection
 const supabaseUrl = "YOUR_PROJECT_URL";
 const supabaseKey = "YOUR_PUBLISHABLE_KEY";
 
-const supabase = window.supabase.createClient(
-    supabaseUrl,
-    supabaseKey
-);
+let supabaseClient = null;
+
+if (window.supabase) {
+    supabaseClient = window.supabase.createClient(
+        supabaseUrl,
+        supabaseKey
+    );
+}
 
 
-// Save Telegram User (only when opened inside Telegram)
+// Save Telegram User
 async function saveTelegramUser() {
+
+    if (!supabaseClient) return;
 
     if (window.Telegram && Telegram.WebApp) {
 
@@ -17,19 +25,19 @@ async function saveTelegramUser() {
 
         if (user) {
 
-            const { error } = await supabase
+            const { error } = await supabaseClient
                 .from("users")
                 .insert([
                     {
                         telegram_id: user.id,
-                        username: user.username
+                        username: user.username || "No username"
                     }
                 ]);
 
             if (error) {
                 console.log(error);
             } else {
-                console.log("User saved successfully");
+                console.log("User saved");
             }
         }
     }
@@ -38,14 +46,14 @@ async function saveTelegramUser() {
 saveTelegramUser();
 
 
-// Kano Coin Mining App
+// Mining System
 
 let balance = localStorage.getItem("kncBalance");
 
 if (balance === null) {
     balance = 0;
 } else {
-    balance = parseInt(balance);
+    balance = Number(balance);
 }
 
 
@@ -54,20 +62,20 @@ const mineBtn = document.getElementById("mineBtn");
 const status = document.getElementById("status");
 
 
-// Show balance
 if (balanceDisplay) {
     balanceDisplay.innerHTML = balance + " KNC";
 }
 
 
-// Start Mining
+// Start Mining Button
+
 if (mineBtn) {
 
-    mineBtn.addEventListener("click", function () {
+    mineBtn.onclick = function () {
 
         let reward = Math.floor(Math.random() * 5) + 1;
 
-        balance += reward;
+        balance = balance + reward;
 
         balanceDisplay.innerHTML = balance + " KNC";
 
@@ -75,19 +83,20 @@ if (mineBtn) {
 
         localStorage.setItem("kncBalance", balance);
 
-    });
+    };
 
 }
 
 
 // Daily Reward
+
 const dailyReward = document.getElementById("dailyReward");
 
 if (dailyReward) {
 
-    dailyReward.addEventListener("click", function () {
+    dailyReward.onclick = function () {
 
-        balance += 20;
+        balance = balance + 20;
 
         balanceDisplay.innerHTML = balance + " KNC";
 
@@ -95,48 +104,45 @@ if (dailyReward) {
 
         localStorage.setItem("kncBalance", balance);
 
-    });
+    };
 
 }
 
 
-// Invite Friends
+// Referral Button
+
 const referral = document.getElementById("referral");
 
 if (referral) {
 
-    referral.addEventListener("click", function () {
-
+    referral.onclick = function () {
         alert("Referral system coming soon!");
-
-    });
+    };
 
 }
 
 
-// Leaderboard
+// Leaderboard Button
+
 const leaderboard = document.getElementById("leaderboard");
 
 if (leaderboard) {
 
-    leaderboard.addEventListener("click", function () {
-
+    leaderboard.onclick = function () {
         alert("Leaderboard coming soon!");
-
-    });
+    };
 
 }
 
 
-// Wallet
+// Wallet Button
+
 const wallet = document.getElementById("wallet");
 
 if (wallet) {
 
-    wallet.addEventListener("click", function () {
-
+    wallet.onclick = function () {
         alert("Wallet feature coming soon!");
+    };
 
-    });
-
-}
+        }
