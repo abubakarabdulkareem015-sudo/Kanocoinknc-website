@@ -1,30 +1,43 @@
+// Supabase Connection
 const supabaseUrl = "YOUR_PROJECT_URL";
 const supabaseKey = "YOUR_PUBLISHABLE_KEY";
 
 const supabase = window.supabase.createClient(
-  supabaseUrl,
-  supabaseKey
+    supabaseUrl,
+    supabaseKey
+);
+
+
+// Save Telegram User (only when opened inside Telegram)
 async function saveTelegramUser() {
-  const user = Telegram.WebApp.initDataUnsafe.user;
 
-  const { error } = await supabase
-    .from("users")
-    .insert([
-      {
-        telegram_id: user.id,
-        username: user.username
-      }
-    ]);
+    if (window.Telegram && Telegram.WebApp) {
 
-  if (error) {
-    console.log(error);
-  } else {
-    console.log("User saved successfully");
-  }
+        const user = Telegram.WebApp.initDataUnsafe.user;
+
+        if (user) {
+
+            const { error } = await supabase
+                .from("users")
+                .insert([
+                    {
+                        telegram_id: user.id,
+                        username: user.username
+                    }
+                ]);
+
+            if (error) {
+                console.log(error);
+            } else {
+                console.log("User saved successfully");
+            }
+        }
+    }
 }
 
 saveTelegramUser();
-);
+
+
 // Kano Coin Mining App
 
 let balance = localStorage.getItem("kncBalance");
@@ -35,57 +48,95 @@ if (balance === null) {
     balance = parseInt(balance);
 }
 
+
 const balanceDisplay = document.getElementById("balance");
 const mineBtn = document.getElementById("mineBtn");
 const status = document.getElementById("status");
 
-balanceDisplay.innerHTML = balance + " KNC";
+
+// Show balance
+if (balanceDisplay) {
+    balanceDisplay.innerHTML = balance + " KNC";
+}
+
 
 // Start Mining
-mineBtn.addEventListener("click", function () {
+if (mineBtn) {
 
-    let reward = Math.floor(Math.random() * 5) + 1;
+    mineBtn.addEventListener("click", function () {
 
-    balance += reward;
+        let reward = Math.floor(Math.random() * 5) + 1;
 
-    balanceDisplay.innerHTML = balance + " KNC";
+        balance += reward;
 
-    status.innerHTML = "🎉 You mined " + reward + " KNC!";
+        balanceDisplay.innerHTML = balance + " KNC";
 
-    localStorage.setItem("kncBalance", balance);
+        status.innerHTML = "🎉 You mined " + reward + " KNC!";
 
-});
+        localStorage.setItem("kncBalance", balance);
+
+    });
+
+}
+
 
 // Daily Reward
-document.getElementById("dailyReward").addEventListener("click", function () {
+const dailyReward = document.getElementById("dailyReward");
 
-    balance += 20;
+if (dailyReward) {
 
-    balanceDisplay.innerHTML = balance + " KNC";
+    dailyReward.addEventListener("click", function () {
 
-    status.innerHTML = "🎁 Daily Reward Claimed! +20 KNC";
+        balance += 20;
 
-    localStorage.setItem("kncBalance", balance);
+        balanceDisplay.innerHTML = balance + " KNC";
 
-});
+        status.innerHTML = "🎁 Daily Reward Claimed! +20 KNC";
+
+        localStorage.setItem("kncBalance", balance);
+
+    });
+
+}
+
 
 // Invite Friends
-document.getElementById("referral").addEventListener("click", function () {
+const referral = document.getElementById("referral");
 
-    alert("Referral system coming soon!");
+if (referral) {
 
-});
+    referral.addEventListener("click", function () {
+
+        alert("Referral system coming soon!");
+
+    });
+
+}
+
 
 // Leaderboard
-document.getElementById("leaderboard").addEventListener("click", function () {
+const leaderboard = document.getElementById("leaderboard");
 
-    alert("Leaderboard coming soon!");
+if (leaderboard) {
 
-});
+    leaderboard.addEventListener("click", function () {
+
+        alert("Leaderboard coming soon!");
+
+    });
+
+}
+
 
 // Wallet
-document.getElementById("wallet").addEventListener("click", function () {
+const wallet = document.getElementById("wallet");
 
-    alert("Wallet feature coming soon!");
+if (wallet) {
 
-});
+    wallet.addEventListener("click", function () {
+
+        alert("Wallet feature coming soon!");
+
+    });
+
+}
