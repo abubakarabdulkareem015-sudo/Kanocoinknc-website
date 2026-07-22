@@ -4,6 +4,26 @@ const supabaseKey = "YOUR_PUBLISHABLE_KEY";
 const supabase = window.supabase.createClient(
   supabaseUrl,
   supabaseKey
+async function saveTelegramUser() {
+  const user = Telegram.WebApp.initDataUnsafe.user;
+
+  const { error } = await supabase
+    .from("users")
+    .insert([
+      {
+        telegram_id: user.id,
+        username: user.username
+      }
+    ]);
+
+  if (error) {
+    console.log(error);
+  } else {
+    console.log("User saved successfully");
+  }
+}
+
+saveTelegramUser();
 );
 // Kano Coin Mining App
 
