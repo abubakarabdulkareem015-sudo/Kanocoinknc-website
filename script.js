@@ -1,4 +1,4 @@
-alert("Kano Coin script is working");
+alert("Kano Coin JS loaded");
 // Kano Coin (KNC) App
 
 // Supabase Connection
